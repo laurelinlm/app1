@@ -58,11 +58,11 @@ with col1:
         'Which age group would you like your content to target?',
         ('0-18', '18-25', '25-40', '40-100'))
     
-def get_hobby():
-    input_text = st.text_input(label="Customers main xyz", key="hobby_input")
+def get_xyz():
+    input_text = st.text_input(label="Customers main xyz", key="xyz_input")
     return input_text
 
-xyz_input = get_hobby()
+xyz_input = get_xyz()
 
 def get_text():
     input_text = st.text_area(label="Content Input", label_visibility='collapsed', placeholder="Your content...", key="content_input")

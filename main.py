@@ -8,12 +8,12 @@ template = """
  You are a marketing copywriter with 20 years of experience. You are analyzing customer's background to write personalized product description that only this customer will receive; 
     PRODUCT input text: {content};
     CUSTOMER age group (y): {agegroup};
-    CUSTOMER main type: {xyz};
+    CUSTOMER main xyz:{xyz};
     TASK: Write a product description that is tailored into this customer's Age group and xyz. Use age group specific slang.;
     FORMAT: Present the result in the following order: (PRODUCT DESCRIPTION), (BENEFITS), (USE CASE);
     PRODUCT DESCRIPTION: describe the product in 5 sentences;
     BENEFITS: describe in 3 sentences why this product is perfect considering customers age group and xyz;
-    USE CASE: write a story in 5 sentences, of an example weekend activity taking into account xyz { xyz} and age {agegroup}, write a story in first person, example "I started my Saturday morning with ...";
+    USE CASE: write a story in 5 sentences, how and when to use it taking into account xyz{xyz} and age {agegroup}, write a story in first person, example "Use it after ...";
 """
 
 prompt = PromptTemplate(
@@ -33,12 +33,12 @@ st.header("Personaliseeritud turundusteksti konverter")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown("Otstarve: tootetutvustustekstide personaliseerimine igale kliendile või kliendigruppidele; väljundtekst on kohandatud kliendi a) vanuserühmaga ja b) tüübiga; sisendtekstiks on neutraalses vormis tootekirjeldus. \
-    \n\n Kasutusjuhend: 1) valmista ette tootekirjeldus (sisendtekst). 2) määra tarbijasegemendid lähtuvalt vanuserühma ja tüüpide kombinatsioonidest. 3) sisesta ükshaaval tarbijasegmentide lõikes eeltoodud info äpi kasutajaliideses, saada ära. \
+    st.markdown("Otstarve: tootetutvustustekstide personaliseerimine igale kliendile või kliendigruppidele; väljundtekst on kohandatud kliendi a) vanuserühmaga ja b) nahatüübiga; sisendtekstiks on neutraalses vormis tootekirjeldus. \
+    \n\n Kasutusjuhend: 1) valmista ette tootekirjeldus (sisendtekst). 2) määra tarbijasegemendid lähtuvalt vanuserühma ja nahatüüpidest. 3) sisesta ükshaaval tarbijasegmentide lõikes eeltoodud info äpi kasutajaliideses, saada ära. \
     4) kopeeri ükshaaval tarbijasegmentide lõikes äpi väljundteksti kõnealuse toote tutvustuslehele.")
 
 with col2:
-    st.image(image='companylogo.jpg', caption='Face cream for dry skin')
+    st.image(image='companylogo.jpg', caption='Nurme Looduskosmeetika')
 
 st.markdown("## Enter Your Content To Convert")
 
@@ -56,13 +56,13 @@ col1, col2 = st.columns(2)
 with col1:
     option_agegroup = st.selectbox(
         'Which age group would you like your content to target?',
-        ('9-15', '16-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-100'))
+        ('0-18', '18-25', '25-40', '40-100'))
     
-def get_type():
-    input_text = st.text_input(label="Customers xyz", key=" type_input")
+def get_hobby():
+    input_text = st.text_input(label="Customers main xyz", key="hobby_input")
     return input_text
 
-type_input = get_ type()
+xyz_input = get_hobby()
 
 def get_text():
     input_text = st.text_area(label="Content Input", label_visibility='collapsed', placeholder="Your content...", key="content_input")
@@ -76,7 +76,7 @@ if len(content_input.split(" ")) > 700:
 
 def update_text_with_example():
     print ("in updated")
-    st.session_state.content_input = "face creams"
+    st.session_state.content_input = "face creams, skin type"
 
 st.button("*GENERATE TEXT*", type='secondary', help="Click to see an example of the content you will be converting.", on_click=update_text_with_example)
 
@@ -89,7 +89,7 @@ if content_input:
 
     llm = load_LLM(openai_api_key=openai_api_key)
 
-    prompt_with_content = prompt.format(agegroup=option_agegroup, xyz=type_input, content=content_input)
+    prompt_with_content = prompt.format(agegroup=option_agegroup, xyz=hobby_input, content=content_input)
 
     formatted_content = llm(prompt_with_content)
 
